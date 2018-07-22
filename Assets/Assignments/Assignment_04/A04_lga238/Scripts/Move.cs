@@ -31,18 +31,19 @@ public class Move : MonoBehaviour
     {
 
         RaycastHit hit;
-
+    // check if raycast intersects griund plane
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
             if (hit.transform.name == "Ground")
-            {
+            {   
+                //teleport to location if distance is less than 10; y value remains the same
                 if (hit.distance <= 10.0f)
                 {
                     var tempPoints = hit.point;
                     tempPoints.y = transform.position.y;
                     transform.position = tempPoints;
                 }
-
+                // if raycast collision distance is greater than 10, move to location normally
                 else
                 {
                     //transform.position+= Camera.main.transform.forward * speed * Time.deltaTime;
@@ -73,6 +74,7 @@ public class Move : MonoBehaviour
             {
                 moving = false;
             }
+            //decelerate 
             transform.position += Camera.main.transform.forward * currentSpeed * Time.deltaTime;
         }
     }
