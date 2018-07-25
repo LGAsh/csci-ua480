@@ -48,7 +48,17 @@ public class EnemyController : NetworkBehaviour {
 	void move(){
 		m = Random.Range(0, 120);
 		if(m % 12 ==0){
-			GetComponent<Rigidbody>().velocity = transform.forward *4;
+			var angles = transform.rotation.eulerAngles;
+			angles.y +=180;
+			if(transform.position.z > 25 || transform.position.z < -25 || transform.position.x > 25 
+			|| transform.position.z < -25){
+				transform.rotation = Quaternion.Euler(angles);
+				GetComponent<Rigidbody>().velocity = transform.forward *4;
+				
+			}
+			else{
+				GetComponent<Rigidbody>().velocity = transform.forward *2;
+			}
 		}
 	}
 

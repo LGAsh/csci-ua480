@@ -1,32 +1,60 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
+
 public class PlayerController : NetworkBehaviour
 {
     public GameObject bulletPrefab;
+    public GameObject CC;
     public Transform bulletSpawn;
 
+
+    public float currentSpeed = 5.0f;
+
+
+    void Start(){
+        CC = Camera.main.transform.parent.gameObject;
+        transform.parent = Camera.main.transform;
+        transform.position = Vector3.zero;
+
+
+        
+    }
+
     void Update()
+
+    
     {
+
         if (!isLocalPlayer)
         {
             return;
         }
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+         RaycastHit hit;
 
-        transform.Rotate(0, x, 0);
-        transform.Translate(0, 0, z);
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+        { 
+            if (hit.transform.name == "Ground")
+            {
+                Vector3 points = Camera.main.transform.forward;
+                points.y= 0;
+                CC.transform.position += points * currentSpeed * Time.deltaTime;
+                
+            }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+
+
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
         {
             CmdFire();
         }
+
+
     }
-
-
-
     [Command]
     void CmdFire()
     {
@@ -42,7 +70,7 @@ public class PlayerController : NetworkBehaviour
         NetworkServer.Spawn(bullet);
 
         // Destroy the bullet after 2 seconds
-        Destroy(bullet, 2.0f);        
+        Destroy(bullet, 2.0f);
     }
 
     public override void OnStartLocalPlayer()
