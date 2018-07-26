@@ -12,12 +12,15 @@ public class PlayerController : NetworkBehaviour
     public float currentSpeed = 5.0f;
 
 
-    void Start(){
+     public override void OnStartLocalPlayer(){
+
+        Debug.Log(Camera.main);
         CC = Camera.main.transform.parent.gameObject;
         transform.parent = Camera.main.transform;
         transform.position = Vector3.zero;
 
 
+    GetComponent<Renderer>().material.color = Color.blue;
         
     }
 
@@ -73,8 +76,4 @@ public class PlayerController : NetworkBehaviour
         Destroy(bullet, 2.0f);
     }
 
-    public override void OnStartLocalPlayer()
-    {
-        GetComponent<Renderer>().material.color = Color.blue;
-    }
 }
